@@ -20,7 +20,7 @@ export default function Home() {
           />
           <Button
             title="Editar articulo"
-            onclick={() => router.push("/articulos?m=edit")}
+            onclick={() => router.push("/articulos")}
           />
         </div>
       </div>
