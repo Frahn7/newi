@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Button } from "../components/button";
 import { FormEvent } from "react";
+import { toast } from "sonner";
 
 export default function Articulos() {
   const searchParams = useSearchParams();
@@ -20,8 +21,6 @@ export default function Articulos() {
       .value;
     const item = { name, price };
 
-    console.log(JSON.stringify(item));
-
     fetch("/api/insert-product", {
       method: "POST",
       headers: {
@@ -31,7 +30,11 @@ export default function Articulos() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        toast(data.message);
+      })
+      .catch((err) => {
+        toast("Error");
+        console.log(err);
       });
   };
 
