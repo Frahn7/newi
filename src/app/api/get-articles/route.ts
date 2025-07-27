@@ -1,20 +1,16 @@
 import { sql } from "@/service/conection-postgres";
 
-export async function POST(request: Request) {
-  const body = await request.json();
-
-  const { name, price } = body;
-
+export async function GET() {
   try {
-    await sql`
+    const results = await sql`
     -- no-cache
-    INSERT INTO newi (name, price)
-    VALUES (${name}, ${price})
+    SELECT *
+    FROM newi
     RETURNING *;
   `;
 
     return Response.json({
-      message: "Artículo creado con éxito",
+      results,
     });
   } catch (error) {
     console.error("Error ejecutando la query:", error);
