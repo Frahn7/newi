@@ -1,15 +1,13 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useSearchParams } from "next/navigation";
 import { Label } from "@/components/ui/label";
 import { Button } from "../components/button";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 export default function Articulos() {
-  const searchParams = useSearchParams();
-  const search = searchParams.get("m");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,52 +19,49 @@ export default function Articulos() {
       .value;
     const item = { name, price };
 
-    fetch("/api/insert-product", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(item),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        toast(data.message);
+    if (name.length > 1 && price.length > 1) {
+      setLoading(true);
+      fetch("/api/insert-product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(item),
       })
-      .catch((err) => {
-        toast("Error");
-        console.log(err);
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          setLoading(false);
+          toast(data.message);
+        })
+        .catch((err) => {
+          toast("Error");
+          console.log(err);
+        });
+    } else toast.error("Completa los campos");
   };
 
   return (
     <form
-      className="flex flex-col gap-5 justify-center py-5"
+      className="flex flex-col gap-5 justify-center min-h-screen"
       onSubmit={(e) => handleSubmit(e)}
     >
-      {search === "add" ? (
-        <div>
-          <Label className="flex flex-col justify-center mb-5 ">
-            Nombre del producto
-            <Input className="w-1/2" name="itemName" />
-          </Label>
-          <Label className="flex flex-col justify-center">
-            Precio del producto
-            <Input className="w-1/2" name="itemPrice" />
-          </Label>{" "}
-        </div>
+      <div>
+        <Label className="flex flex-col justify-center mb-5 ">
+          Nombre del producto
+          <Input className="w-1/4 bg-gray-300" name="itemName" />
+        </Label>
+        <Label className="flex flex-col justify-center">
+          Precio del producto
+          <Input className="w-1/4 bg-gray-300" name="itemPrice" />
+        </Label>{" "}
+      </div>
+      {loading ? (
+        <div className="flex justify-center">Cargando</div>
       ) : (
-        <div>
-          <Label className="flex flex-col justify-center mb-5">
-            Editar nombre del producto
-            <Input className="w-1/2" />
-          </Label>
-          <Label className="flex flex-col justify-center">
-            Editar precio del producto
-            <Input className="w-1/2" />
-          </Label>
+        <div className="flex justify-center">
+          <Button title="Enviar" type={"submit"} />
         </div>
       )}
-      <Button title="Enviar" type={"submit"} />
     </form>
   );
 }

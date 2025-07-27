@@ -3,10 +3,13 @@
 import { useRouter } from "next/navigation";
 import { Button } from "./components/button";
 import { HomeSkeleton } from "./components/skeleton";
+import { useGetArticles } from "./hooks/useGetArticles";
 
 export default function Home() {
   const skeletonArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const router = useRouter();
+
+  const { articles, error, loading } = useGetArticles();
 
   return (
     <div className="flex min-h-screen justify-center flex-col items-center gap-8 font-bold">
@@ -16,10 +19,6 @@ export default function Home() {
         <div className="flex flex-row gap-4 justify-center mt-4">
           <Button
             title="Añadir articulo"
-            onclick={() => router.push("/articulos?m=add")}
-          />
-          <Button
-            title="Editar articulo"
             onclick={() => router.push("/articulos")}
           />
         </div>
