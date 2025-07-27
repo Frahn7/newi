@@ -6,7 +6,7 @@ import { HomeSkeleton } from "./components/skeleton";
 import { useGetArticles } from "./hooks/useGetArticles";
 
 export default function Home() {
-  const skeletonArray = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const skeletonArray = [1, 2, 3, 4];
   const router = useRouter();
 
   const { articles, error, loading } = useGetArticles();
@@ -25,10 +25,22 @@ export default function Home() {
       </div>
       <h2 className="text-xl ">Catalogo</h2>
       <div className="flex py-5 justify-center flex-row gap-4 items-center flex-wrap">
-        {skeletonArray.map((e, k) => (
-          <HomeSkeleton key={k} />
-        ))}
+        {loading ? (
+          <div className="flex flex-row flex-wrap gap-3">
+            {skeletonArray.map((e, k) => (
+              <HomeSkeleton key={k} />
+            ))}
+          </div>
+        ) : (
+          articles.map((e, k) => (
+            <div key={k}>
+              {e.name}
+              {e.price}
+            </div>
+          ))
+        )}
       </div>
+      {error}
     </div>
   );
 }

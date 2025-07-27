@@ -2,21 +2,27 @@
 
 import { useEffect, useState } from "react";
 
+interface ProductsProps {
+  id: number;
+  name: string;
+  price: string;
+}
+
 export const useGetArticles = () => {
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState<ProductsProps[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch("/api/get-articles")
       .then((res) => res.json())
       .then((data) => {
-        setArticles(data);
+        setArticles(data.results);
         setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        setError(err);
+        setError(err.toString());
       });
   }, []);
 

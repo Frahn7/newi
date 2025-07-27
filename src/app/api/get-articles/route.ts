@@ -3,10 +3,9 @@ import { sql } from "@/service/conection-postgres";
 export async function GET() {
   try {
     const results = await sql`
-    -- no-cache
     SELECT *
     FROM newi
-    RETURNING *;
+    WHERE 1=1
   `;
 
     return Response.json({
