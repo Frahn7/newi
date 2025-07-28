@@ -5,9 +5,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "../components/button";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
+import { ArrowLeftToLine } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Articulos() {
   const [loading, setLoading] = useState(false);
+  const route = useRouter();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,6 +48,10 @@ export default function Articulos() {
       className="flex flex-col gap-5 justify-center min-h-screen"
       onSubmit={(e) => handleSubmit(e)}
     >
+      <ArrowLeftToLine
+        onClick={() => route.push("/")}
+        className="cursor-pointer hover:text-orange-400 absolute top-2 left-2 w-7 h-7"
+      />
       <div>
         <Label className="flex flex-col justify-center mb-5 ">
           Nombre del producto

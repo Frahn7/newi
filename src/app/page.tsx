@@ -4,9 +4,10 @@ import { useRouter } from "next/navigation";
 import { Button } from "./components/button";
 import { HomeSkeleton } from "./components/skeleton";
 import { useGetArticles } from "./hooks/useGetArticles";
+import { ArticlesCard } from "./components/articles-card";
 
 export default function Home() {
-  const skeletonArray = [1, 2, 3, 4];
+  const skeletonArray = [1, 2, 3, 4, 5];
   const router = useRouter();
 
   const { articles, error, loading } = useGetArticles();
@@ -34,8 +35,11 @@ export default function Home() {
         ) : (
           articles.map((e, k) => (
             <div key={k}>
-              {e.name}
-              {e.price}
+              <ArticlesCard
+                name={e.name}
+                price={e.price.toString()}
+                id={e.id}
+              />
             </div>
           ))
         )}
